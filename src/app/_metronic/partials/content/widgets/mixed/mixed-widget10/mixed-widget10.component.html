@@ -1,0 +1,109 @@
+<div class="card card-xl-stretch mb-xl-8">
+  <div class="card-header border-0">
+    <h3 class="card-title fw-bolder text-dark">Cupones y Descuentos</h3>
+  </div>
+  <div class="card-body pt-0">
+    <!-- Primera fila de métricas -->
+    <div class="row g-0 mb-3">
+      <!-- Total Cupones -->
+      <div class="col-6">
+        <div class="bg-light-primary px-6 py-8 rounded-2 me-3">
+          <span class="svg-icon svg-icon-3x svg-icon-primary d-block my-2">
+            <i class="fas fa-ticket-alt fa-2x text-primary"></i>
+          </span>
+          <a href="#" class="text-primary fw-bold fs-6">
+            Total Cupones
+            <span class="d-block display-6">{{metrics.totalCoupons}}</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Cupones Activos -->
+      <div class="col-6">
+        <div class="bg-light-success px-6 py-8 rounded-2 ms-3">
+          <span class="svg-icon svg-icon-3x svg-icon-success d-block my-2">
+            <i class="fas fa-check-circle fa-2x text-success"></i>
+          </span>
+          <a href="#" class="text-success fw-bold fs-6">
+            Cupones Activos
+            <span class="d-block display-6">{{metrics.activeCoupons}}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segunda fila de métricas -->
+    <div class="row g-0">
+      <!-- Cupones Porcentaje -->
+      <div class="col-6">
+        <div class="bg-light-info px-6 py-8 rounded-2 me-3">
+          <span class="svg-icon svg-icon-3x svg-icon-info d-block my-2">
+            <i class="fas fa-percent fa-2x text-info"></i>
+          </span>
+          <a href="#" class="text-info fw-bold fs-6">
+            Desc. Porcentaje
+            <span class="d-block display-6">{{metrics.percentageCoupons}}</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Cupones Monto Fijo -->
+      <div class="col-6">
+        <div class="bg-light-warning px-6 py-8 rounded-2 ms-3">
+          <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
+            <i class="fas fa-dollar-sign fa-2x text-warning"></i>
+          </span>
+          <a href="#" class="text-warning fw-bold fs-6">
+            Desc. Monto Fijo
+            <span class="d-block display-6">{{metrics.fixedCoupons}}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de Cupones Recientes -->
+    <div class="mt-8">
+      <h3 class="card-title align-items-start flex-column">
+        <span class="fw-bolder mb-2 text-dark">Cupones Recientes</span>
+      </h3>
+      <div class="table-responsive">
+        <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+          <thead>
+            <tr class="fw-bolder text-muted">
+              <th class="min-w-150px">Código</th>
+              <th class="min-w-120px">Tipo</th>
+              <th class="min-w-120px">Descuento</th>
+              <th class="min-w-120px text-center">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <span style="padding: 10px;" class="spinner-border spinner-border-sm align-middle ms-2"
+              *ngIf="isLoading | async"></span>
+            <tr *ngFor="let coupon of recentCoupons">
+              <td>
+                <span class="text-dark fw-bolder">{{coupon.code}}</span>
+              </td>
+              <td>
+                <span class="badge badge-light-primary" *ngIf="coupon.type_discount === 1">
+                  Porcentaje
+                </span>
+                <span class="badge badge-light-info" *ngIf="coupon.type_discount === 2">
+                  Monto Fijo
+                </span>
+              </td>
+              <td>
+                <span class="fw-bold">
+                  {{coupon.type_discount === 1 ? coupon.discount + '%' : '$' + coupon.discount}}
+                </span>
+              </td>
+              <td class="text-center">
+                <span class="badge badge-light-success" *ngIf="coupon.state === 1">Activo</span>
+                <span class="badge badge-light-danger" *ngIf="coupon.state !== 1">Inactivo</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

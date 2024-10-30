@@ -1,0 +1,105 @@
+<div class="card card-xl-stretch mb-xl-8">
+  <div class="card-header border-0">
+    <h3 class="card-title fw-bolder text-dark">Dashboard de Cursos</h3>
+  </div>
+  <div class="card-body pt-0">
+    <!-- Primera fila de métricas -->
+    <div class="row g-0 mb-3">
+      <!-- Total Cursos -->
+      <div class="col-6">
+        <div class="bg-light-primary px-6 py-8 rounded-2 me-3">
+          <span class="svg-icon svg-icon-3x svg-icon-primary d-block my-2">
+            <i class="fas fa-book fa-2x text-primary"></i>
+          </span>
+          <a href="#" class="text-primary fw-bold fs-6">
+            Total Cursos
+            <span class="d-block display-6">{{metrics.totalCourses}}</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Cursos Publicados -->
+      <div class="col-6">
+        <div class="bg-light-success px-6 py-8 rounded-2 ms-3">
+          <span class="svg-icon svg-icon-3x svg-icon-success d-block my-2">
+            <i class="fas fa-check-circle fa-2x text-success"></i>
+          </span>
+          <a href="#" class="text-success fw-bold fs-6">
+            Publicados
+            <span class="d-block display-6">{{metrics.publishedCourses}}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segunda fila de métricas -->
+    <div class="row g-0">
+      <!-- Cursos en Borrador -->
+      <div class="col-6">
+        <div class="bg-light-warning px-6 py-8 rounded-2 me-3">
+          <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
+            <i class="fas fa-pencil-alt fa-2x text-warning"></i>
+          </span>
+          <a href="#" class="text-warning fw-bold fs-6">
+            Borradores
+            <span class="d-block display-6">{{metrics.draftCourses}}</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Promedio de Precio -->
+      <div class="col-6">
+        <div class="bg-light-info px-6 py-8 rounded-2 ms-3">
+          <span class="svg-icon svg-icon-3x svg-icon-info d-block my-2">
+            <i class="fas fa-dollar-sign fa-2x text-info"></i>
+          </span>
+          <a href="#" class="text-info fw-bold fs-6">
+            Precio Promedio
+            <span class="d-block display-6">${{getAveragePrice()}}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cursos Recientes -->
+    <div class="mt-8">
+      <h3 class="card-title align-items-start flex-column">
+        <span class="fw-bolder mb-2 text-dark">Últimos Cursos Agregados</span>
+      </h3>
+      <div class="table-responsive">
+        <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+          <thead>
+            <tr class="fw-bolder text-muted">
+              <th class="min-w-150px">Curso</th>
+              <th class="min-w-140px">Instructor</th>
+              <th class="min-w-120px">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <span style="padding: 10px;" class="spinner-border spinner-border-sm align-middle ms-2"
+              *ngIf="isLoading | async"></span>
+            <tr *ngFor="let course of recentCourses">
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="symbol symbol-45px me-5">
+                    <img [src]="course.imagen || './assets/media/avatars/logop.png'" alt="" class="w-80"/>
+                  </div>
+                  <div class="d-flex flex-column">
+                    <span class="text-dark fw-bolder text-hover-primary">{{course.title}}</span>
+                    <span class="text-muted fw-bold">{{course.subtitle}}</span>
+                  </div>
+                </div>
+              </td>
+              <td>{{course.user?.name}} {{course.user?.surname}}</td>
+              <td>
+                <span class="badge" [ngClass]="{'badge-light-success': course.state == 2, 'badge-light-warning': course.state == 1}">
+                  {{course.state == 2 ? 'Publicado' : 'Borrador'}}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

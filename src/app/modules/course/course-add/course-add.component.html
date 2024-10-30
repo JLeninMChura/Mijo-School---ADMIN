@@ -1,0 +1,249 @@
+<span class="spinner-border spinner-border-sm align-middle ms-2" *ngIf="isLoading | async"></span>
+<div class="card">
+    <!--begin::Card header-->
+    <div class="card-header">
+        <!--begin::Card title-->
+        <div class="card-title fs-3 fw-bolder">Registrar Nuevo Cursos</div>
+        <!--end::Card title-->
+    </div>
+    <!--end::Card header-->
+    <!--begin::Form-->
+    <form id="kt_project_settings_form" class="form fv-plugins-bootstrap5 fv-plugins-framework" novalidate="novalidate">
+
+        <!--begin::Card body-->
+        <div class="card-body p-9">
+            <!--begin::Row-->
+            <div class="row mb-5">
+                <!--begin::Col-->
+                <div class="col-xl-3">
+                    <div class="fs-6 fw-bold mt-2 mb-3">Portada del Curso</div>
+                </div>
+                <!--end::Col-->
+                <!--begin::Col-->
+                <div class="col-lg-8">
+                    <!--begin::Image input-->
+                    <div class="image-input image-input-outline" data-kt-image-input="true"
+                        style="background-image: url('assets/media/svg/avatars/blank.svg')">
+                        <!--begin::Preview existing avatar-->
+                        <div class="image-input-wrapper w-125px h-125px" [ngStyle]="{
+                'background-image': 'url(' + IMAGEN_PREVISUALIZA + ')'
+              }"></div>
+                        <!--end::Preview existing avatar-->
+                        <!--begin::Label-->
+                        <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                            data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change avatar">
+                            <i class="bi bi-pencil-fill fs-7"></i>
+                            <!--begin::Inputs-->
+                            <input type="file" name="avatar" accept=".png, .jpg, .jpeg"
+                                (change)="processFile($event)" />
+                            <input type="hidden" name="avatar_remove" />
+                            <!--end::Inputs-->
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Cancel-->
+                        <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                            data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel avatar">
+                            <i class="bi bi-x fs-2"></i>
+                        </span>
+                    </div>
+                    <div class="form-text">Allowed file types: png, jpg, jpeg.</div>
+                </div>
+            </div>
+            <div class="row mb-8">
+                <div class="col-xl-3">
+                    <label class="fs-6 fw-bold mt-2 mb-3">Titulo del Curso</label>
+                </div>
+
+                <div class="col-xl-9 fv-row fv-plugins-icon-container">
+                    <input type="text" class="form-control form-control-solid" name="title" [(ngModel)]="title"
+                        placeholder="Desarrollo web">
+                    <div class="fv-plugins-message-container invalid-feedback"></div>
+                </div>
+            </div>
+            <div class="row mb-8">
+                <!--begin::Col-->
+                <div class="col-xl-3">
+                    <label class="fs-6 fw-bold mt-2 mb-3">Sub titulo del curos</label>
+                </div>
+
+                <div class="col-xl-9 fv-row fv-plugins-icon-container">
+                    <input type="text" class="form-control form-control-solid" name="subtitle" [(ngModel)]="subtitle"
+                        placeholder="Nociones Avazandas">
+                    <div class="fv-plugins-message-container invalid-feedback"></div>
+                </div>
+            </div>
+            <div class="row mb-8">
+                <!--begin::Col-->
+                <div class="col-xl-3">
+                    <label class="fs-6 fw-bold mt-2 mb-3">Instructor encargado</label>
+                </div>
+
+                <div class="col-xl-9 fv-row fv-plugins-icon-container">
+                    <select class="form-control form-select-solid fw-bolder" [(ngModel)]="user_id" name="subcategoria"
+                        placeholder="Selec. Instructor">
+                        <ng-container *ngFor="let inst of instructor">
+                            <option [value]="inst.id">{{inst.full_name}}</option>
+                        </ng-container>
+
+
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-8">
+                <!--begin::Col-->
+                <div class="col-xl-3">
+                    <div class="fs-6 fw-bold mt-2 mb-3">Descripción</div>
+                </div>
+                <!--end::Col-->
+                <!--begin::Col-->
+                <div class="col-xl-9 fv-row fv-plugins-icon-container">
+                    <!-- data="<p>Hello works</p>" -->
+                    <ckeditor [data]="description" (change)="onChange($event)"></ckeditor>
+                </div>
+                <!--begin::Col-->
+            </div>
+
+            <div class="row mb-8">
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="fs-6 fw-bold mt-2 mb-3">Requerimientos</div>
+                            <div class="d-flex">
+                                <input type="text" class="form-control form-control-solid" [(ngModel)]="text_reque"
+                                    name="requerimineto" placeholder="Angular v.17.0.1">
+                                <button type="button" class="btn btn-sm btn-primary my-2 mx-2"
+                                    (click)="addRequi()">+</button>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table align-middle gs-0 gy-3">
+                                    <thead>
+                                        <tr>
+                                            <th class="p-0 "></th>
+                                            <th class="p-0"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let reque of requirements; let i=index">
+                                            <td>
+                                                <a href="#" onclick="return false"
+                                                    class="text-dark fw-bolder text-hover-primary mb-1 fs-6">{{reque}}</a>
+                                            </td>
+                                            <td class="text-end text-muted fw-bold"><button
+                                                    class="btn btn-sm btn-danger"
+                                                    (click)="removeRequeriments(i)">X</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="fs-6 fw-bold mt-2 mb-3">Personas que estan interesadas en este tema:</div>
+                            <div class="d-flex">
+                                <input type="text" class="form-control form-control-solid"
+                                    [(ngModel)]="text_what_is_for" name="what_is_for" placeholder="Developers">
+                                <button type="button" class="btn btn-sm btn-primary my-2 mx-2"
+                                    (click)="addWhatisFor()">+</button>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <!--begin::Table-->
+                                <table class="table align-middle gs-0 gy-3">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <tr>
+                                            <th class="p-0 "></th>
+                                            <th class="p-0"></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr *ngFor="let instru of what_is_for; let i=index">
+                                            <td>
+                                                <a href="#" onclick="return false"
+                                                    class="text-dark fw-bolder text-hover-primary mb-1 fs-6">{{instru}}</a>
+                                            </td>
+                                            <td class="text-end text-muted fw-bold"><button
+                                                    class="btn btn-sm btn-danger"
+                                                    (click)="removeWhatisFor(i)">X</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-8">
+                <div class="col-6">
+                    <label class="fs-6 fw-bold mt-2 mb-3">Nivel:</label>
+                    <select class="form-control form-select-solid fw-bolder" name="level" [(ngModel)]="level"
+                        placeholder="Selec. Nivel">
+                        <option value="Basico">Basico</option>
+                        <option value="Intermedio">Intermedio</option>
+                        <option value="Avanzado">Avanzado</option>
+                    </select>
+
+                    <label class="fs-6 fw-bold mt-2 mb-3">Idioma:</label>
+                    <select class="form-control form-select-solid fw-bolder" name="idioma" [(ngModel)]="idioma"
+                        placeholder="Selec. Idioma">
+                        <option value="Español">Español</option>
+                        <option value="Ingles">Ingles</option>
+                        <option value="Portuges">Portuges</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label class="fs-6 fw-bold mt-2 mb-3">Categoria:</label>
+                    <select class="form-control form-select-solid fw-bolder" name="categorie" [(ngModel)]="category_id"
+                        placeholder="Selec. Categoria" (change)="selectcategroy($event)">
+                        <option value=" ">Selec. una Categoria</option>
+                        <ng-container *ngFor="let cat of categoria">
+                            <option [value]="cat.id">{{cat.name}}</option>
+                        </ng-container>
+                    </select>
+
+                    <label class="fs-6 fw-bold mt-2 mb-3">Sub-Categoria:</label>
+                    <select class="form-control form-select-solid fw-bolder" name="subcategoria"
+                        [(ngModel)]="sub_categorie_id" placeholder="Selec. Sub-Categoria">
+                        <option value=" ">Selec. una Sub-Categoria</option>
+                        <ng-container *ngFor="let cat of subcategoria_back">
+                            <option [value]="cat.id">{{cat.name}}</option>
+                        </ng-container>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-8">
+                <div class="col-6">
+                    <label class="fs-6 fw-bold mt-2 mb-3">Precio en Soles:</label>
+                    <input type="number" class="form-control form-control-solid" name="pen" [(ngModel)]="precio_pen"
+                        placeholder="30">
+                </div>
+                <div class="col-6">
+                    <label class="fs-6 fw-bold mt-2 mb-3">Precio en Dolares:</label>
+                    <input type="number" class="form-control form-control-solid" name="usd" [(ngModel)]="precio_usd"
+                        placeholder="50">
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="card-footer d-flex justify-content-end py-6 px-9">
+            <button type="button" (click)="save()" class="btn btn-primary" id="kt_project_settings_submit">Guardar
+                Cursos</button>
+        </div>
+
+        <input type="hidden">
+        <div></div>
+    </form>
+
+</div>

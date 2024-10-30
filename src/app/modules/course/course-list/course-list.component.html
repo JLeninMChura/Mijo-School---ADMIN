@@ -1,0 +1,172 @@
+<div class="card">
+    <div class="card-header border-0 pt-6">
+        <div class="card-title">
+            <div class="d-flex align-items-center position-relative my-1">
+                <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
+                            transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+                        <path
+                            d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
+                            fill="currentColor" />
+                    </svg>
+                </span>
+                <input [(ngModel)]="search" (input)="listCourses()" type="text" data-kt-user-table-filter="search"
+                    class="form-control form-control-solid w-250px ps-14" placeholder="Buscar" />
+            </div>
+        </div>
+        <div class="card-toolbar">
+            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+                <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
+                    data-kt-menu-placement="bottom-end">
+                    <span class="svg-icon svg-icon-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z"
+                                fill="currentColor" />
+                        </svg>
+                    </span>
+                    Filtrar
+                </button>
+                <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true">
+                    <div class="px-7 py-5">
+                        <div class="fs-5 text-dark fw-bolder">Opciones</div>
+                    </div>
+                    <div class="separator border-gray-200"></div>
+                    <div class="px-7 py-5">
+                        <div class="mb-10">
+                            <label class="form-label fs-6 fw-bold">Estado:</label>
+                            <select name="state" [(ngModel)]="state" class="form-select form-select-solid fw-bolder">
+                                <option value="0">Todos</option>
+                                <option value="1">Inactivo</option>
+                                <option value="2">Activo</option>
+                            </select>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button (click)="clearFilters()" type="button"
+                                class="btn btn-light btn-active-light-primary fw-bold me-2 px-6">Limpiar</button>
+                            <button (click)="listCourses()" type="button"
+                                class="btn btn-primary fw-bold px-6">Aplicar</button>
+                        </div>
+                    </div>
+                </div>
+                <a [routerLink]="['/cursos/registro']" class="btn btn-primary">
+                    <span class="svg-icon svg-icon-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1"
+                                transform="rotate(-90 11.364 20.364)" fill="currentColor" />
+                            <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+                        </svg>
+                    </span>
+                    Nuevo Curso
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body py-4 table-responsive">
+        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+            <thead>
+                <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                    <th class="min-w-125px">Imagen</th>
+                    <th class="min-w-125px">Titulo</th>
+                    <th class="min-w-125px">Categoria</th>
+                    <th class="min-w-125px">Precio en USD</th>
+                    <th class="min-w-125px">Precio en PEN</th>
+                    <th class="min-w-125px">Nivel</th>
+                    <th class="min-w-125px">Idioma</th>
+                    <th class="min-w-125px">Estado</th>
+                    <th class="min-w-100px">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 fw-bold">
+                <tr *ngIf="isLoading | async">
+                    <td colspan="8" class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </td>
+                </tr>
+                <ng-container *ngFor="let course of COURSES">
+                    <tr *ngIf="!(isLoading | async)">
+                        <td class="d-flex align-items-center">
+                            <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+                                <ng-container>
+                                    <div class="symbol-label">
+                                        <img [src]="course.imagen" alt="Imagen" class="w-100" />
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </td>
+                        <td>{{ course.title }}</td>
+                        <td>{{ course.category.name }}</td>
+                        <td>{{ course.precio_usd }}</td>
+                        <td>{{ course.precio_pen }}</td>
+                        <td>{{ course.level}}</td>
+                        <td>{{ course.idioma}}</td>
+                        <td>
+                            <div [ngClass]="course.state == 1 ? 'badge-light-warning' : 'badge-light-success'"
+                                class="badge fw-bolder">{{
+                                course.state
+                                == 1 ?
+                                'Inactivo' : 'Activo' }}</div>
+                        </td>
+
+
+                        <td>
+                            <div class="d-flex justify-content-start flex-shrink-0">
+                                <a [routerLink]="['/cursos/list/editar/', course.id]" onclick="return false;"
+                                    class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                    <span class="svg-icon svg-icon-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none">
+                                            <path opacity="0.3"
+                                                d="M21.4 8.35303L19.241 10.511L13.485 4.755L15.643 2.59595C16.0248 2.21423 16.5426 1.99988 17.0825 1.99988C17.6224 1.99988 18.1402 2.21423 18.522 2.59595L21.4 5.474C21.7817 5.85581 21.9962 6.37355 21.9962 6.91345C21.9962 7.45335 21.7817 7.97122 21.4 8.35303ZM3.68699 21.932L9.88699 19.865L4.13099 14.109L2.06399 20.309C1.98815 20.5354 1.97703 20.7787 2.03189 21.0111C2.08674 21.2436 2.2054 21.4561 2.37449 21.6248C2.54359 21.7934 2.75641 21.9115 2.989 21.9658C3.22158 22.0201 3.4647 22.0084 3.69099 21.932H3.68699Z"
+                                                fill="currentColor" />
+                                            <path
+                                                d="M5.574 21.3L3.692 21.928C3.46591 22.0032 3.22334 22.0141 2.99144 21.9594C2.75954 21.9046 2.54744 21.7864 2.3789 21.6179C2.21036 21.4495 2.09202 21.2375 2.03711 21.0056C1.9822 20.7737 1.99289 20.5312 2.06799 20.3051L2.696 18.422L5.574 21.3ZM4.13499 14.105L9.891 19.861L19.245 10.507L13.489 4.75098L4.13499 14.105Z"
+                                                fill="currentColor" />
+                                        </svg>
+                                    </span>
+                                </a>
+                                <a [routerLink]="['/cursos/list/secciones/', course.id]" onclick="return false;"
+                                    class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                                    <span class="svg-icon svg-icon-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none">
+                                            <path opacity="0.3"
+                                                d="M18 22C19.7 22 21 20.7 21 19C21 18.5 20.9 18.1 20.7 17.7L15.3 6.30005C15.1 5.90005 15 5.5 15 5C15 3.3 16.3 2 18 2H6C4.3 2 3 3.3 3 5C3 5.5 3.1 5.90005 3.3 6.30005L8.7 17.7C8.9 18.1 9 18.5 9 19C9 20.7 7.7 22 6 22H18Z"
+                                                fill="currentColor"></path>
+                                            <path d="M18 2C19.7 2 21 3.3 21 5H9C9 3.3 7.7 2 6 2H18Z"
+                                                fill="currentColor">
+                                            </path>
+                                            <path d="M9 19C9 20.7 7.7 22 6 22C4.3 22 3 20.7 3 19H9Z"
+                                                fill="currentColor">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                </a>
+                                <a (click)="deleteCourse(course)" onclick="return false;"
+                                    class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                                    <span class="svg-icon svg-icon-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none">
+                                            <path
+                                                d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z"
+                                                fill="currentColor" />
+                                            <path opacity="0.5"
+                                                d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z"
+                                                fill="currentColor" />
+                                            <path opacity="0.5"
+                                                d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z"
+                                                fill="currentColor" />
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+</div>

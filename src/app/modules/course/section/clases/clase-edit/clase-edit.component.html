@@ -1,0 +1,221 @@
+<!--begin::Modal content-->
+<div class="modal-content">
+    <!--begin::Modal header-->
+    <div class="modal-header" id="kt_modal_add_user_header">
+        <!--begin::Modal title-->
+        <h2 class="fw-bolder">Editar Clase: {{clase_select.name}}</h2>
+        <!--end::Modal title-->
+        <!--begin::Close-->
+        <div class="btn btn-icon btn-sm btn-active-icon-primary" (click)="modal.dismiss()">
+            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+            <span class="svg-icon svg-icon-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)"
+                        fill="currentColor" />
+                    <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                        fill="currentColor" />
+                </svg>
+            </span>
+            <!--end::Svg Icon-->
+        </div>
+        <!--end::Close-->
+    </div>
+    <!--end::Modal header-->
+    <!--begin::Modal body-->
+    <div class="scroll-y">
+        <!--begin::Form-->
+        <form id="kt_project_settings_form" class="form fv-plugins-bootstrap5 fv-plugins-framework"
+            novalidate="novalidate">
+
+            <!--begin::Card body-->
+            <div class="card-body p-9">
+                <!--begin::Row-->
+                <div class="row mb-8">
+                    <div class="col-xl-3">
+                        <label class="fs-6 fw-bold mt-2 mb-3">Nombre de la Clase:</label>
+                    </div>
+
+                    <div class="col-xl-9 fv-row fv-plugins-icon-container">
+                        <input type="text" class="form-control form-control-solid" name="seccion_name"
+                            [(ngModel)]="title" placeholder="Incio de Pedido, Lugares donde comprar">
+                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="row mb-8">
+                    <div class="col-xl-3">
+                        <label class="required fw-bold fs-6 mb-2">Estado</label>
+                    </div>
+                    <div class="col-xl-9 fv-row fv-plugins-icon-container">
+                        <select class="form-control form-select-solid fw-bolder" name="state" placeholder="Estado"
+                            [(ngModel)]="state">
+                            <option value="1">Activo</option>
+                            <option value="2">Desactivo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-8">
+                    <div class="col-12">
+                        <div class="fs-6 fw-bold mt-2 mb-3">Descripción</div>
+                    </div>
+                    <!--end::Col-->
+                    <!--begin::Col-->
+                    <div class="col-12 fv-row fv-plugins-icon-container">
+                        <!-- data="<p>Hello works</p>" -->
+                        <ckeditor [data]="description" (change)="onChange($event)"></ckeditor>
+                    </div>
+                    <!--begin::Col-->
+                </div>
+                <div class="row mb-8">
+                    <div class="row mb-5">
+                        <div class="col-xl-3">
+                            <div class="fs-6 fw-bold mt-2 mb-3">Video introductorio del Curso</div>
+                        </div>
+                        <div class="col-lg-8">
+                            <label for="form-label">Vide del clase</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="customFile" accept=".mp4"
+                                    (change)="processVideo($event)">
+                                <label for="customFile" class="custom-file-label">Cambiar Video</label>
+                            </div>
+                            <div class="col-5">
+                                <button class="btn btn-sm btn-primary" (click)="uploadVideo()"
+                                    *ngIf="!isUploadVideo">+</button>
+                                <span class="spinner-border spinner-border-sm align-middle ms-2"
+                                    *ngIf="isUploadVideo"></span>
+                            </div>
+                            <div class="form-text">Aceptamos videos tipo: mp4.</div>
+                            <div *ngIf="link_video_clase" class="py-4">
+                                <iframe [src]="urlVideo()" frameborder="0" allow="autoplay; fullscreen"
+                                    allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-8">
+                    <div class="col-xl-4">
+                        <label class="fs-6 fw-bold mt-2 mb-3">Subir los recursos de la clase:</label>
+                    </div>
+                    <div class="col-xl-8 fv-row fv-plugins-icon-container">
+                        <!--begin::Dropzone-->
+                        <div class="dropzone dropzone-queue mb-0" id="kt_modal_upload_dropzone">
+
+                            <input class="dropzone-select btn btn-sm btn-primary me-2 dz-clickable" type="file"
+                                id="sutomFile" multiple (change)="processFile($event)" />
+
+                        </div>
+                        <span class="form-text fs-6 text-muted">Max file size is 1MB per file.</span>
+                        <div class="col-5">
+                            <button class="btn btn-sm btn-primary" (click)="uploadFiles()"
+                                *ngIf="!isUploadFile">+</button>
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"
+                                *ngIf="isUploadFile"></span>
+                        </div>
+                    </div>
+                    <div class="card card-flush  col-xl-12">
+                        <div class="card-header pt-7">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder text-dark">Lista de Archivos Subidos</span>
+                                <span class="text-gray-400 mt-1 fw-bold fs-6">Recursos Descargables</span>
+                            </h3>
+                            <div class="card-toolbar">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="hover-scroll-overlay-y pe-6 me-n6">
+                                <ng-container *ngFor="let file of FILES_CLASE">
+                                    <div
+                                        class="rounded border-gray-300 border-1 border-gray-300 border-dashed px-7 py-3 mb-6">
+                                        <!--begin::Info-->
+                                        <div class="d-flex flex-stack mb-3">
+                                            <!--begin::Wrapper-->
+                                            <div class="me-3">
+                                                <!--begin::Icon-->
+                                                <img src="assets/media/svg/files/doc.svg" class="w-50px ms-n1 me-1"
+                                                    alt="">
+                                                <!--end::Icon-->
+                                                <!--begin::Title-->
+                                                <a href="#" onclick="return false"
+                                                    class="text-gray-800 text-hover-primary fw-bolder">{{file.name_file}}</a>
+                                                <!--end::Title-->
+                                            </div>
+                                            <!--end::Wrapper-->
+                                        </div>
+                                        <!--end::Info-->
+                                        <!--begin::Customer-->
+                                        <div class="d-flex flex-stack">
+                                            <!--begin::Name-->
+                                            <span class="text-gray-400 fw-bolder">Tamaño:
+                                                <a href="#" onclick="return false"
+                                                    class="text-gray-800 text-hover-primary fw-bolder">{{file.size}}</a></span>
+                                            <span class="badge badge-light-success">{{file.type}}</span>
+                                            <button class="btn  btn-sm btn-danger" (click)="deletefilr(file)">X</button>
+                                        </div>
+                                        <!--end::Customer-->
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="card card-flush  col-xl-12">
+                        <div class="card-header pt-7">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder text-dark">Lista de Archivos</span>
+                                <span class="text-gray-400 mt-1 fw-bold fs-6">Recursos Descargables</span>
+                            </h3>
+                            <div class="card-toolbar">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="hover-scroll-overlay-y pe-6 me-n6">
+                                <ng-container *ngFor="let file of FILES">
+                                    <div
+                                        class="rounded border-gray-300 border-1 border-gray-300 border-dashed px-7 py-3 mb-6">
+                                        <!--begin::Info-->
+                                        <div class="d-flex flex-stack mb-3">
+                                            <!--begin::Wrapper-->
+                                            <div class="me-3">
+                                                <!--begin::Icon-->
+                                                <img src="assets/media/svg/files/doc.svg" class="w-50px ms-n1 me-1"
+                                                    alt="">
+                                                <!--end::Icon-->
+                                                <!--begin::Title-->
+                                                <a href="#" onclick="return false"
+                                                    class="text-gray-800 text-hover-primary fw-bolder">{{file.name}}</a>
+                                                <!--end::Title-->
+                                            </div>
+                                            <!--end::Wrapper-->
+                                        </div>
+                                        <!--end::Info-->
+                                        <!--begin::Customer-->
+                                        <div class="d-flex flex-stack">
+                                            <!--begin::Name-->
+                                            <span class="text-gray-400 fw-bolder">Tamaño:
+                                                <a href="#" onclick="return false"
+                                                    class="text-gray-800 text-hover-primary fw-bolder">{{file.size}}
+                                                    KB</a></span>
+                                            <!--end::Name-->
+                                            <!--begin::Label-->
+                                            <span class="badge badge-light-success">Activo</span>
+                                            <!--end::Label-->
+                                        </div>
+                                        <!--end::Customer-->
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer d-flex justify-content-end py-6 px-9">
+                <button type="button" (click)="store()" class="btn btn-primary" id="kt_project_settings_submit">Guardar
+                    Cambios</button>
+            </div>
+        </form>
+        <!--end::Form-->
+    </div>
+    <!--end::Modal body-->
+</div>
+<!--end::Modal content-->

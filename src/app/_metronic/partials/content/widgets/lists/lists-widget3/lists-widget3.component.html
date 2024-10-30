@@ -1,0 +1,117 @@
+<!-- mixed-widget7.component.html -->
+<div class="card card-xl-stretch mb-xl-8">
+  <div class="card-header border-0">
+    <h3 class="card-title fw-bolder text-dark">Campañas de Descuento</h3>
+  </div>
+  <div class="card-body pt-0">
+    <div class="row g-0">
+      <!-- Total Campañas -->
+      <div class="col-6 bg-light-primary px-6 py-8 rounded-2 me-3 mb-3">
+        <span class="svg-icon svg-icon-3x svg-icon-primary d-block my-2">
+          <i class="fas fa-tags fa-2x text-primary"></i>
+        </span>
+        <a href="#" class="text-primary fw-bold fs-6">
+          Total Campañas
+          <span class="d-block display-6">{{metrics.totalCampaigns}}</span>
+        </a>
+      </div>
+      
+      <!-- Campañas Activas -->
+      <div class="col-6 bg-light-success px-6 py-8 rounded-2 mb-3">
+        <span class="svg-icon svg-icon-3x svg-icon-success d-block my-2">
+          <i class="fas fa-clock fa-2x text-success"></i>
+        </span>
+        <a href="#" class="text-success fw-bold fs-6">
+          Campañas Activas
+          <span class="d-block display-6">{{metrics.activeCampaigns}}</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="row g-0">
+      <!-- Campañas por Tipo -->
+      <div class="col-4 bg-light-info px-6 py-8 rounded-2 me-3">
+        <span class="svg-icon svg-icon-3x svg-icon-info d-block my-2">
+          <i class="fas fa-bullhorn fa-2x text-info"></i>
+        </span>
+        <a href="#" class="text-info fw-bold fs-6">
+          Normal
+          <span class="d-block display-6">{{metrics.normalCampaigns}}</span>
+        </a>
+      </div>
+      
+      <div class="col-4 bg-light-warning px-6 py-8 rounded-2 me-3">
+        <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
+          <i class="fas fa-bolt fa-2x text-warning"></i>
+        </span>
+        <a href="#" class="text-warning fw-bold fs-6">
+          Flash
+          <span class="d-block display-6">{{metrics.flashCampaigns}}</span>
+        </a>
+      </div>
+
+      <div class="col-3 bg-light-danger px-6 py-8 rounded-2">
+        <span class="svg-icon svg-icon-3x svg-icon-danger d-block my-2">
+          <i class="fas fa-ad fa-2x text-danger"></i>
+        </span>
+        <a href="#" class="text-danger fw-bold fs-6">
+          Banner
+          <span class="d-block display-6">{{metrics.bannerCampaigns}}</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Campañas Recientes -->
+    <div class="mt-8">
+      <h3 class="card-title align-items-start flex-column">
+        <span class="fw-bolder mb-2 text-dark">Campañas Recientes</span>
+      </h3>
+      <div class="table-responsive">
+        <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+          <thead>
+            <tr class="fw-bolder text-muted">
+              <th class="min-w-150px">Código</th>
+              <th class="min-w-120px">Tipo</th>
+              <th class="min-w-120px">Descuento</th>
+              <th class="min-w-120px">Vigencia</th>
+              <th class="min-w-120px">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <span style="padding: 10px;" class="spinner-border spinner-border-sm align-middle ms-2"
+              *ngIf="isLoading | async"></span>
+            <tr *ngFor="let discount of recentDiscounts">
+              <td>
+                <span class="text-dark fw-bolder">{{discount.code}}</span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="{
+                  'badge-light-primary': discount.type_campaing === 1,
+                  'badge-light-warning': discount.type_campaing === 2,
+                  'badge-light-danger': discount.type_campaing === 3
+                }">
+                  {{getCampaignType(discount.type_campaing)}}
+                </span>
+              </td>
+              <td>
+                <span class="fw-bold">
+                  {{discount.type_discount === 1 ? discount.discount + '%' : '$' + discount.discount}}
+                </span>
+              </td>
+              <td>
+                <span class="text-muted fw-bold">
+                  {{formatDate(discount.start_date)}} - {{formatDate(discount.end_date)}}
+                </span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="getStatusClass(getCampaignStatus(discount))">
+                  {{getCampaignStatus(discount)}}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
